@@ -1,0 +1,101 @@
+{% extends "main.html" %}
+
+<div class="content">
+{% block header %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+<style>
+    .list_container {
+        display: inline-block;
+    }
+    ul {
+        text-align: left;
+    }
+</style>
+{% endblock%}
+
+{% block body %}
+    <div class="list_container">
+        <h3>Ingredients you have:</h3>
+        <ul style="text-transform: capitalize;">
+            {% for ingr in ingredients %}
+                <li>{{ ingr }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="form">
+        <form id="myform" onsubmit="sendPrefs(); return false;" >
+            <h3>Please rate the following recipes:</h3>
+            {% for recipe in recipes %}
+                <label title="{{ recipe[2] }}" for="{{ recipe[1] }}">{{ recipe[0] }}</label><br>
+                <label for="{{ recipe[1] }}">1</label>
+                {% for i in range(5) %}
+                <input class="required" type="radio" id="select_{{ i+1 }}" name="{{ recipe[1] }}" value="{{ i+1 }}">
+                {% endfor %}
+                <label for="{{ recipe[1] }}">5</label><br><br>
+            {% endfor %}        
+        </form>
+        <button onclick="sendPrefs('retrain')" title="May take 7-10 minutes.">Deep Recommend</button>
+        <button onclick="sendPrefs('RF-Rec')" title="May take 1.5-5 minutes.">"Quick" Recommend</button>
+    </div>
+    <div id="processing" hidden>
+        <p>Processing... <span id="progress">0.00%</span></p>
+        <p style="font-size: 16px;">Please do not reload the page</p>
+    </div>
+    <div id="results" hidden>
+        <div class="list_container">
+            <h3>Recipes you can (and should!) make:</h3>
+            <ul id="recipes"></ul>
+        </div>
+    </div>
+{% endblock%}
+
+{% block postbody %}
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+</script>
+
+<script>
+
+    function checkChecked() {
+        {% for recipe in recipes %}
+        if($("input[name={{ recipe[1] }}]:checked").length == 0) return false;
+        {% endfor %}
+        return true;
+    }
+
+    function sendPrefs(method) {
+        if(!checkChecked()) return;
+        console.log($("#myform").serializeArray())
+        socket.emit("get_recommendations", {
+            form: $("#myform").serializeArray(),
+            method,
+            ingredients: [
+            {% for ingr in ingredients %}
+                "{{ ingr }}",
+            {% endfor %}
+            ],
+        })
+        $("#form").hide()
+        $("#processing").show()
+    }
+
+
+    socket.on('recommendations', function(json) {
+        $("#processing").hide()
+        $("#results").show()
+
+        console.log(json)
+        for (const recipe of json) {
+            $("#recipes").append("<li title='Est. Rating: " + recipe["est_rating"].toFixed(2) + "'><a href='recipes/" + recipe["id"] + "' target='_blank'>" + recipe["name"] + "</a></li>")
+        }
+    });
+
+    socket.on('progress', function(json) {
+        $("#progress").text(json)
+    });
+</script>
+
+{% endblock%}
+</div>

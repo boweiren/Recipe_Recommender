@@ -1,0 +1,5 @@
+image-uploads/
+__pycache__/
+.DS_Store
+.ipynb_checkpoints/
+temp.ipynb

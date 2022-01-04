@@ -1,0 +1,2 @@
+- it seems like most of the concerns/bottlenecks have been resolved, so that is good to see. Using sockets is definitely a good idea.
+- re fixing 6 recipes: Why will there be less than 6 results? Is it due to the filtering? Or is there more than 6 results after filtering, but the recommender outputs less than 6 results with > 0 confidence? It might be useful to get to the bottom of this issue. Also, is it possible just to display a "blank" result in the UI if less than 6 results are returned?

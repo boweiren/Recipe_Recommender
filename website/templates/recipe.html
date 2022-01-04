@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+
+{% block header %}
+<style>
+    #container {
+        margin: 10px;
+    }
+    #recipe_name {
+        text-transform: capitalize;
+    }
+    .list_container {
+        display: inline-block;
+    }
+    ul,ol {
+        text-align: left;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+    <div id="container">
+        <h1 id="recipe_name">{{ recipe_name }}</h1>
+        <p>{{ recipe_description }}</p>
+        <div class="list_container">
+        <h3>Ingredients</h3>
+        <ul>
+            {% for ingr in recipe_ingredients %}
+                <li>{{ ingr }}</li>
+            {% endfor %}
+        </ul>
+        </div>
+        <div class="list_container">
+        <h3>Steps</h3>
+        <ol>
+            {% for step in recipe_steps %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+        </div>
+    </div>
+{% endblock %}

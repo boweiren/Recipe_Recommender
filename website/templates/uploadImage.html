@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<!doctype html>
+<head>
+	<title>Upload Ingredients</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/upload.css') }}">
+<style>
+  html {
+      height: 100%;
+  }
+  body {
+    background-image: url("{{ url_for('static',filename='styles/images/bgpic_2.jpg') }}");
+    background-position: center center;
+    background-size: cover;
+    background-color: #AEAEAE;
+	}
+
+  #list_container {
+    display: inline-block;
+  }
+  ul {
+    text-align: left;
+    text-transform: capitalize;
+    font-size: 16px;
+    columns: 7;
+    -webkit-columns: 7;
+    -moz-columns: 7;
+  }
+  .mycontent{
+    text-align: center;
+    vertical-align: middle;
+    color: #173200;
+    font-size: 40px;
+    font-family: Arial, Helvetica, sans-serif;
+    /* position: absolute; */
+    display: inline-block;
+    background-color: rgba(255,255, 255, 0.5);
+    background-blend-mode: multiply;
+    border-radius: 5px;
+    padding: .5em;
+    margin: 2em;
+    margin-top: .5em;
+  }
+  #myform {
+    background-color: rgba(255,255, 255, 0.5);
+    border: 2px solid ;
+  	border-radius: 5px;
+    background-color: azure;
+    background-blend-mode: multiply;
+    width: 900px;
+    height: 70px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+  }
+</style>
+</head>
+	
+<body>	
+  <div class="mycontent">
+    <h4 style="margin-bottom: 0px;">Recipe Recommender</h4>
+    <p style="font-size: 18px;">
+      Welcome to the recipe recommender! Please upload images of ingredients 
+      that you have. You will then be asked to rate a few recipes. Please rate
+      all recipes on a scale from 1 to 5, even if you don't have the ingredients
+      to make it. Then select either "Deep Recommend" or "Quick Recommend". 
+      Deep Recommend will use matrix factorization to produce recommendations. 
+      This may take up to 10 minutes so please be patient. Quick Recommend uses 
+      a rating frequency recommendation algorithm which will take closer to 3 
+      minutes, use this if you only have a few ingredients.
+    </p>
+    <h2>Ingredient Upload</h2>
+
+    <form id="myform" method="post" enctype="multipart/form-data">
+      <input type=file name=image[] multiple required>
+      <input type=submit value=Upload>
+    </form>
+
+    <div id="list_container">
+      <h5 style="margin-bottom: 0px;">Supported Ingredients</h3>
+      <ul>
+        {% for ingr in ingr_list %}
+        <li>{{ ingr }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</body>

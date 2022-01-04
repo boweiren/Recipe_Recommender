@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Recommender</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/upload.css') }}">
+	<div class="content_2">
+    {% block header %}
+    {% endblock %}
+	</div>
+	<style>
+	html {
+    	height: 80%;
+	}
+	body {
+		background-image: url("{{ url_for('static',filename='styles/images/bgpic_1.jpg') }}");
+		background-position: center center;
+    	background-size: auto;
+        background-repeat: no-repeat;
+		background-color: #AEAEAE;
+		}
+	</style>
+</head>
+<body>
+	<div class="content_3">
+    {% block body %}
+    {% endblock %}
+
+    {% block postbody %}
+    {% endblock %}
+	</div>
+</body>
+</html>
